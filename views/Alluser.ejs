@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light p-4">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="display-4 text-primary">
+         Total Players 
+        </h1>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mb-6">
+        <form action="/" method="GET">
+            <button class="btn btn-primary btn-lg">Back</button>
+        </form>
+    </div>
+
+    <!-- Users Grid -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        <% for (const user of players) { %>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">ID: <%= user.id %></h5>
+                        <p class="card-text">Player1: <%= user.player1_name%></p>
+                        <p class="card-text">player2: <%= user.player2_name %></p>
+                        
+                        <p class="card-text">player1_Symbol: <%= user.player1_symbol %></p>
+                        <p class="card-text">player2_Symbol: <%= user.player2_symbol %></p>
+                        <p class="card-text">Winner_Symbol: <%= user.winner %></p>
+
+                       
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Link to Bootstrap JS & dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

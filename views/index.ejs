@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="cont">
+            <!-- 9 boxes for the Tic Tac Toe grid -->
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+        <!-- Reset button --> 
+        <form action="/end" method="GET">  
+    <button type="submit" id="resetBtn">Reset</button>
+</form>
+
+    </div>
+
+    <script>
+        const boxes = document.querySelectorAll(".box");
+        const resetButton = document.getElementById('resetBtn');
+        let turno = true; // true = "O's turn", false = "X's turn"
+        let gameOver = false; // Flag to check if the game is over
+
+        // Define the winning positions (arrays of box indices)
+        const winningPositions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+
+        // Initialize the board
+        let board = Array(9).fill(null);
+
+        // Function to check for a winner
+        function checkWinner() {
+            for (let positions of winningPositions) {
+                const [a, b, c] = positions;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a]; // Return "O" or "X" as the winner
+                }
+            }
+            return null;
+        }
+
+        // Function to handle box clicks
+        function handleClick(index) {
+            if (gameOver || board[index] !== null) return; // Ignore if box is already clicked or game is over
+
+            if (turno) {
+                boxes[index].innerHTML = "O";
+                board[index] = "O";
+                turno = false;
+            } else {
+                boxes[index].innerHTML = "X";
+                board[index] = "X";
+                turno = true; 
+            }
+
+            const winner = checkWinner();
+            if (winner) {
+                gameOver = true;
+                setTimeout(() => {
+                    alert(`${winner} wins!`);
+                }, 10); // Display winner
+            }
+        }
+        boxes.forEach((box, index) => {
+            box.addEventListener("click", () => handleClick(index));
+        });
+
+        resetButton.addEventListener("click", async () => {
+  
+    let winner = null;
+
+    if (gameOver) {
+    
+        winner = checkWinner();  
+    }
+
+    try {
+        const response = await fetch('/reset-game', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: 'Resetting the game',
+                winner: winner,
+            }),
+        });
+
+        if (response.ok) {
+            console.log('Game reset successfully on the backend');
+        } else {
+            console.error('Error resetting game on the backend');
+        }
+    } catch (error) {
+        console.error('Request failed', error);
+    }
+
+    
+    board = Array(9).fill(null);
+    boxes.forEach(box => {
+        box.innerHTML = ""; 
+    });
+    turno = true; 
+    gameOver = false; 
+});
+
+    </script>
+</body>
+</html>
